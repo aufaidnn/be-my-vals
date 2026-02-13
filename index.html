@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vals - Be My Valentine</title>
+<title>Be My Valentines</title>
 
 <style>
     body {
@@ -19,7 +19,7 @@
     }
 
     .card-container {
-        perspective: 1000px;
+        position: relative;
     }
 
     .card {
@@ -29,9 +29,9 @@
         background: white;
         box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         cursor: pointer;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
+        transition: transform 0.4s ease;
         position: relative;
+        overflow: hidden;
     }
 
     .card:hover {
@@ -42,49 +42,49 @@
         width: 100%;
         height: 100%;
         object-fit: contain;
-        border-radius: 20px;
     }
 
     .message {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         background: #fff0f6;
-        border-radius: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         text-align: center;
         padding: 20px;
-        box-sizing: border-box;
         opacity: 0;
         transition: opacity 0.6s ease;
-    }
-
-    .message h1 {
-        color: #ff2e7a;
-        font-size: 24px;
-        margin-bottom: 15px;
-        animation: fadeIn 1s ease forwards;
-    }
-
-    .message p {
-        color: #a10045;
-        font-size: 14px;
-        line-height: 1.6;
-        animation: fadeIn 2s ease forwards;
     }
 
     .show-message .message {
         opacity: 1;
     }
 
-    @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(20px);}
-        to {opacity: 1; transform: translateY(0);}
+    .message h1 {
+        color: #ff2e7a;
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .message p {
+        color: #a10045;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .mute-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #ff2e7a;
+        border: none;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 12px;
     }
 
     .hearts {
@@ -105,25 +105,24 @@
         0% {transform: translateY(0); opacity: 1;}
         100% {transform: translateY(-500px); opacity: 0;}
     }
-
 </style>
 </head>
 <body>
 
 <div class="card-container">
     <div class="card" onclick="openCard()">
-        <img src="valentine-card.png" alt="Valentine Card">
+        <button class="mute-btn" onclick="toggleSound(event)">🔊</button>
+        <img src="valentine card.png" alt="Valentine Card">
         
         <div class="message">
-            <h1>Will you be my Valentine? 💖</h1>
+            <h1>💖 Will you be my Valentine? 💖</h1>
             <p>
                 If time could pause,  
-                I would choose this moment —  
-                when my heart quietly whispers your name.  
+                I would choose that moment  
+                when my heart softly whispers your name.
                 <br><br>
-                Like a gentle sunrise,  
-                you color my ordinary days  
-                with warmth I never knew I needed.
+                You are the silent in my hectic days,  
+                the stiff rhythm behind my smile.
             </p>
         </div>
 
@@ -131,16 +130,41 @@
     </div>
 </div>
 
+<audio id="bg-music" loop>
+    <source src="a thousands year.mp4" type="audio/mpeg">
+</audio>
+
 <script>
+let music = document.getElementById("bg-music");
+let isPlaying = false;
+
 function openCard() {
     document.querySelector('.card').classList.toggle('show-message');
     createHearts();
+
+    if (!isPlaying) {
+        music.play();
+        isPlaying = true;
+    }
+}
+
+function toggleSound(event) {
+    event.stopPropagation();
+    let btn = document.querySelector('.mute-btn');
+
+    if (music.paused) {
+        music.play();
+        btn.innerHTML = "🔊";
+    } else {
+        music.pause();
+        btn.innerHTML = "🔇";
+    }
 }
 
 function createHearts() {
     const heartsContainer = document.getElementById("hearts");
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 8; i++) {
         let heart = document.createElement("div");
         heart.classList.add("heart");
         heart.innerHTML = "❤";
